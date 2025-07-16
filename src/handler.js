@@ -87,7 +87,7 @@ const getAllBooks = (req, h) => {
   if (finished !== undefined) {
     const isFinished = finished === '1';
     filteredBooks = filteredBooks.filter(
-      (book) => book.finished === isFinished
+      (book) => book.finished === isFinished,
     );
   }
 
@@ -95,7 +95,7 @@ const getAllBooks = (req, h) => {
   if (name !== undefined) {
     const nameLower = name.toLowerCase();
     filteredBooks = filteredBooks.filter((book) =>
-      book.name.toLowerCase().includes(nameLower)
+      book.name.toLowerCase().includes(nameLower),
     );
   }
 
@@ -151,9 +151,15 @@ const updateBook = (req, h) => {
     reading,
   } = req.payload;
 
+  let finished = false;
+
   const updatedAt = new Date().toISOString();
 
   const index = books.findIndex((book) => book.id === id);
+
+  if (readPage == pageCount) {
+    finished = true;
+  }
 
   if (!name) {
     const response = h.response({
@@ -184,6 +190,7 @@ const updateBook = (req, h) => {
       publisher,
       pageCount,
       readPage,
+      finished,
       reading,
       updatedAt,
     };
